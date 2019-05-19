@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<!-- make sure you load staticfiles or you will get a TemplateSyntaxError -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- 1. acquire the viewport meta tag from getboostrap.com -->
+  <meta name="description" content="{% block metadescription %} {% endblock %}">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}"> 
+  <!-- placing custom.css above bootstrap.min.css will grant it priority -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> 
+  <!-- 2. Insert the django static pack in href via the word static prior to the location within static, also put the location in single quotes -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/fontawesome-all.min.css' %}">
+  <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="container-fluid bg-light navbar-fixed-top my_top_navbar_div">
+      {% include 'top-navbar.html' %}
+    </div>
+    {% include 'header.html' %}
+    {% include 'navbar.html' %}
+    {% block content %}
+    {% endblock %}
+  </div>
+    {% include 'footer.html' %}
+  <script src="{% static 'js/jquery-3.3.1.slim.min.js' %}" ></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <!-- the above 3 files are taken from the bootstrap cdn but their code was copy-pasted into static/js, thus I reference it to that location -->
+</body>
+
+</html>
+

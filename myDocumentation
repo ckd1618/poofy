@@ -1,0 +1,190 @@
+# django_cart
+Instructions to create the project from scratch:
+
+python -m venv myenvironment  
+cd myenvironment  
+Scripts\activate  
+//deactivate   
+pip install django  
+//in you have problems on win10 with sll install:  
+//https://slproweb.com/products/Win32OpenSSL.html  
+//to check django version:  
+python  
+import django  
+django.get_version()  
+django.VERSION  
+//while inside of myenvironment with it activated:  
+django-admin startproject poofy   
+django_cart\myenvironment\poofy>python manage.py migrate  
+python manage.py runserver  
+python manage.py startapp shop  
+//edit shop/views.py  
+//edit poofy/urls.py  
+//add shop to settings.py  
+python manage.py runserver  
+//edit shop/models.py  
+//edit poofy/settings.py with MEDIA_ROOT  
+//edit poofy/urls.py with: if settings.DEBUG:  
+//with environment enabled run the following:  
+\myenvironment\poofy>pip install Pillow  
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+//ckd16 ckd1618@gmail.com password123
+//now you can go to localhost:8000/admin since you created the superuser
+python manage.py runserver
+//edit shop/admin.py
+python manage.py runserver
+//now you can create products and categories from the admin page, while uploading images and descriptions
+//to add products from a csv file, this option must be enabled, do the following:
+pip install django-import-export
+//in settings.py add the following:
+//1.)'import_export' to Installed apps  
+//2.) IMPORT_EXPORT_USE_TRANSACTIONS = True 
+//in admin.py: from import_export.admin import ImportExportModelAdmin  
+//adjust the ProductAdmin argument to have ImportExportModelAdmin   
+//now you can run the server  
+//to add thumbnail images to the product listing in the admin page:  
+from django.utils.html import format_html   
+//in admin.py create a function def thumbnail(self,obj): and have it return a string with an img tag  
+//in the terminal, retrieve the data with:  
+python manage.py shell  
+from shop.models import Category, Product  
+Product.objects.all()  
+p= Product.objects.all()  
+c= Category.objects.all()  
+//Product.objects.get(id=1)  
+//Product.objects.get(pk=1)  
+//catId1 = Category.objects.get(id=1)  
+//prodWCatId1 = Product.objects.filter(category=catId1)  
+//prodEle = Product.objects.filter(name__startswith='Elephant')  
+//prodEleCont = Product.objects.filter(name__contains='Elephant')  
+//Product.objects.filter(price__range(10,25))  
+//p=Product.objects.create(name='pug dog', price=30)   
+//p.save()  
+//p.delete()  
+
+//in shop create create folder templates, then in templates create shop folder  
+//in poofy/settings.py add to TEMPLATES list the following: 'DIRS': [os.path.join(BASE_DIR, 'shop','templates/')],  
+//in shop/templates/shop create base.html
+//create a folder called img inside of static and add a logo and banner images
+//in shop/templates create footer.html header.html navbar.html
+//in views add the function allProdCat  
+//create a file in poofy/shop called urls.py
+//goto pein django.urls import include and then add a reference to shop/urls.py under urlpatterns  
+//create a file in shop/templates/shop called category.html  
+
+//**********admin and 3 webpages are up****************
+
+//in poofy/shop create context_processors.py
+//add it to templates in settings.py
+
+//localize bootstrap after copy pasting the code into static under css and js folders, run:
+python manage.py collectstatic
+//with this command line I collect all the static data along with the bootstrap js and css files
+
+//fonts.google.com
+//select roboto and copy paste the link
+//in the custom.css file, paste the rule under body {}
+
+//when dealing with css div.myclass refers to a class found on the same line
+// div .myclass refer to two separate lines
+
+//acquire fontawesome 5.0.13 and add its webfont folder to static and its all.min.css file to static/css
+python manage.py collectstatic
+
+python manage.py startapp search_app
+//create the templates folder in search_app and add it to installed apps in settins.py, besure to add it to templates = 'DIRS' as well
+
+python manage.py startapp cart
+
+python manage.py makemigrations
+python manage.py migrate
+// whenever you create a templates folder, make sure you register the folder in settings.py under Templates
+
+pip install stripe
+//add stripe to installed apps in settings.py
+
+python manage.py startapp order
+//add order to settings.py
+
+//copy C:\Users\ckd16\Desktop\ag\django_cart\myenvironment\Lib\site-packages\django\contrib\admin\templates\admin\edit_inline\tabular.html
+//this file controls the behavior of the order item section of the order record
+
+pip install django-crispy-forms
+//to help design the signup form, via the aid of bootstrap classes
+//after installing, make sure to register it in settings.py
+// also add: CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+--------------------------------------------
+
+//deployment on aws
+// //do all of the following in the root of your project where your manage.py file is:
+pip freeze > requirements.txt
+type nul > .gitignore
+//go into .gitignore and add:
+//*.pyc
+//you can also add venv/ if your virtual environment is in the same folder
+
+//virtual environment setup
+
+sudo apt-get update
+sudo apt-get install python3-pip python3-dev nginx git    // answer Yes when prompted!
+sudo apt-get update
+sudo pip3 install virtualenv
+virtualenv venv --python=python3
+source venv/bin/activate
+//once activated go to the location of the requirements.txt
+pip install -r requirements.txt
+pip install gunicorn
+//python manage.py runserver
+sudo vim settings.py
+//press i
+DEBUG= False
+ALLOWED_HOSTS = ['<ipv4 Public ip>']
+//esc shift: wq or q! (write quit or quit!)
+//while in your repo with manage.py location with (venv) enabled
+
+your repo name that has all the files: django_cart/myenvironment/perfectcushion //dango-demo-deployment
+your project name with the settings.py and wsgi.py files: perfectcushion //login-reg
+django_cart/myenvironment/perfectcushion/perfectcushion
+
+sudo vim /etc/systemd/system/gunicorn.service
+//edit and paste the following:
+[Unit]
+Description=gunicorn daemon
+After=network.target
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/django_cart/myenvironment/perfectcushion
+ExecStart=/home/ubuntu/django_cart/myenvironment/perfectcushion/perfectcushion.sock perfectcushion.wsgi:application
+[Install]
+WantedBy=multi-user.target
+
+:wq
+
+sudo systemctl daemon-reload
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+
+cd into the repo directory (where manage.py is, not settings.py)
+sudo vim /etc/nginx/sites-available/perfectcushion
+
+server {
+    listen 80;
+    server_name 54.184.96.29;
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/ubuntu/django_cart/myenvironment/perfectcushion;
+    }
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/django_cart/myenvironment/perfectcushion/perfectcushion.sock;
+    }
+}
+
+sudo ln -s /etc/nginx/sites-available/perfectcushion /etc/nginx/sites-enabled
+sudo nginx -t
+sudo rm /etc/nginx/sites-enabled/default
+sudo service nginx restart
