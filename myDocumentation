@@ -145,20 +145,21 @@ ALLOWED_HOSTS = ['<ipv4 Public ip>']
 //esc shift: wq or q! (write quit or quit!)
 //while in your repo with manage.py location with (venv) enabled
 
-your repo name that has all the files: django_cart/myenvironment/perfectcushion //dango-demo-deployment
-your project name with the settings.py and wsgi.py files: perfectcushion //login-reg
-django_cart/myenvironment/perfectcushion/perfectcushion
+your repo name that has all the files: django_cart/myenvironment/poofy //dango-demo-deployment
+your project name with the settings.py and wsgi.py files: poofy //login-reg
+django_cart/myenvironment/poofy/poofy
 
 sudo vim /etc/systemd/system/gunicorn.service
 //edit and paste the following:
+
 [Unit]
 Description=gunicorn daemon
 After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/django_cart/myenvironment/perfectcushion
-ExecStart=/home/ubuntu/django_cart/myenvironment/perfectcushion/perfectcushion.sock perfectcushion.wsgi:application
+WorkingDirectory=/home/ubuntu/poofy
+ExecStart=/home/ubuntu/poofy/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/poofy/poofy.sock poofy.wsgi:application
 [Install]
 WantedBy=multi-user.target
 
@@ -169,22 +170,22 @@ sudo systemctl start gunicorn
 sudo systemctl enable gunicorn
 
 cd into the repo directory (where manage.py is, not settings.py)
-sudo vim /etc/nginx/sites-available/perfectcushion
+sudo vim /etc/nginx/sites-available/poofy
 
 server {
-    listen 80;
-    server_name 54.184.96.29;
-    location = /favicon.ico { access_log off; log_not_found off; }
-    location /static/ {
-        root /home/ubuntu/django_cart/myenvironment/perfectcushion;
-    }
-    location / {
-        include proxy_params;
-        proxy_pass http://unix:/home/ubuntu/django_cart/myenvironment/perfectcushion/perfectcushion.sock;
-    }
+  listen 80;
+  server_name 52.37.104.218;
+  location = /favicon.ico { access_log off; log_not_found off; }
+  location /static/ {
+      root /home/ubuntu/poofy;
+  }
+  location / {
+      include proxy_params;
+      proxy_pass http://unix:/home/ubuntu/poofy/poofy.sock;
+  }
 }
 
-sudo ln -s /etc/nginx/sites-available/perfectcushion /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/poofy /etc/nginx/sites-enabled
 sudo nginx -t
 sudo rm /etc/nginx/sites-enabled/default
 sudo service nginx restart

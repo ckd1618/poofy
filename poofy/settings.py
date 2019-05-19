@@ -130,7 +130,7 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 STATIC_URL = '/static/'
 #we have 2 image fields in our models, this makes sure the images are uploaded to the right location
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #this joins the base directory to the staticfiles
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'media') #this joins the base directory to the staticfiles
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'), #another join, this is where all the static data will be saved
     )
