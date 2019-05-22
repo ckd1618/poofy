@@ -144,3 +144,11 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 STRIPE_PUBLISHABLE_KEY = 'pk_test_eMa5fCSOnhU7wIOuX3giu4MV00K5tHaXCZ'
 STRIPE_SECRET_KEY = 'sk_test_lz1YzCCHvFGleee0CAg2LaRD00XjgBZHj1'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+#Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ckd1240@gmail.com'
+EMAIL_HOST_PASSWORD = ''#enter your password here as you setup the server
