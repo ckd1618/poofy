@@ -273,6 +273,9 @@ server {
   location /static/ {
       root /home/ubuntu/poofy;
   }
+  location /media/ {
+    alias /home/ubuntu/poofy/static/media/;
+  }
   location / {
       include proxy_params;
       proxy_pass http://unix:/home/ubuntu/poofy/poofy.sock;
