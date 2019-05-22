@@ -47,9 +47,10 @@ def cart_detail(request, total=0, counter=0, cart_items= None):
       counter += cart_item.quantity
   except ObjectDoesNotExist:
     pass
+
+  stripe.api_key = settings.STRIPE_SECRET_KEY
   stripe_total = int(total * 100)
   description = 'New Order'
-  stripe.api_key = settings.STRIPE_SECRET_KEY
   data_key = settings.STRIPE_PUBLISHABLE_KEY
   if request.method == 'POST':
     # print(request.POST)
@@ -67,32 +68,32 @@ def cart_detail(request, total=0, counter=0, cart_items= None):
       shippingPostcode = request.POST['stripeShippingAddressZip']
       shippingCountry = request.POST['stripeShippingAddressCountryCode']
       customer = stripe.Customer.create(
-        email=email,
-        source = token
-      )
+          email=email,
+          source = token
+        )
       charge = stripe.Charge.create(
-        amount=stripe_total,
-        currency="usd",
-        description=description,
-        customer=customer.id
-      )
+          amount=stripe_total,
+          currency="usd",
+          description=description,
+          customer=customer.id
+        )
       # I create the order here
       try:
         order_details = Order.objects.create(
-          token = token,
-          total = total,
-          emailAddress = email,
-          billingName = billingName,
-          billingAddress1 = billingAddress1,
-          billingCity = billingcity,
-          billingPostcode = billingPostcode,
-          billingCountry = billingCountry,
-          shippingName = shippingName,
-          shippingAddress1 = shippingAddress1,
-          shippingCity = shippingcity,
-          shippingPostcode = shippingPostcode,
-          shippingCountry = shippingCountry
-        )
+            token = token,
+            total = total,
+            emailAddress = email,
+            billingName = billingName,
+            billingAddress1 = billingAddress1,
+            billingCity = billingcity,
+            billingPostcode = billingPostcode,
+            billingCountry = billingCountry,
+            shippingName = shippingName,
+            shippingAddress1 = shippingAddress1,
+            shippingCity = shippingcity,
+            shippingPostcode = shippingPostcode,
+            shippingCountry = shippingCountry
+          )
         order_details.save()
         for order_item in cart_items:
           oi = OrderItem.objects.create(
@@ -109,18 +110,16 @@ def cart_detail(request, total=0, counter=0, cart_items= None):
           order_item.delete()
           # terminal confirmation when saved
           print('The order has been created')
-
         try:
           '''Calling the sendEmail function'''
           sendEmail(order_details.id)
           print('The order email has been sent to the customer.')
         except IOError as e:
           return e
-
         return redirect('order:thanks', order_details.id)
         # return redirect('shop:allProdCat')
       except ObjectDoesNotExist:
-      	pass
+        pass
     except stripe.error.CardError as e:
       return False,e
   return render(request, 'cart.html', dict(cart_items = cart_items, total = total, counter = counter, data_key = data_key, stripe_total = stripe_total, description = description))

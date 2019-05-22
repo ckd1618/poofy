@@ -224,8 +224,8 @@ sudo vim settings.py
 2.) Now you should be in the vim editor viewing settings.py, make the following changes, press "i" to edit inside of vim:
 
 DEBUG = False
-ALLOWED_HOSTS = ['34.214.179.127']
-3.) The coding dojo instructions also state that I should add the following line, however, I did NOT put it because you already had a similar line:
+ALLOWED_HOSTS = ['18.236.69.2']
+3.) The instructions also state that I should add the following line, however, I did NOT put it because you already had a similar line:
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 According to your instructions, we put in "staticfiles" instead of "static", so I kept it the way you had it.
@@ -268,7 +268,7 @@ sudo vim /etc/nginx/sites-available/poofy
 
 server {
   listen 80;
-  server_name 34.214.179.127;
+  server_name 18.236.69.2;
   location = /favicon.ico { access_log off; log_not_found off; }
   location /static/ {
       root /home/ubuntu/poofy;
@@ -293,7 +293,7 @@ sudo rm /etc/nginx/sites-enabled/default
 sudo service nginx restart
 14.) Now the server is up and running at: 
 
-34.214.179.127/shop
+18.236.69.2/shop
 
 be sure to add your password to the settings.py file
-also go to cart/email/email.html and add 34.214.179.127 in place of the old server address
+also go to cart/templates/email/email.html and add 18.236.69.2 in place of the old server address
