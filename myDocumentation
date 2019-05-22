@@ -119,7 +119,7 @@ pip install django-crispy-forms
 --------------------------------------------
 
 //deployment on aws
-// //do all of the following in the root of your project where your manage.py file is:
+// //do all of the following in the root of your project where your manage.py file is with you environment on:
 pip freeze > requirements.txt
 type nul > .gitignore
 //go into .gitignore and add:
