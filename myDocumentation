@@ -211,7 +211,8 @@ sudo apt-get update
 sudo apt-get install python-pip python-dev nginx git
 sudo apt-get update
 sudo pip install virtualenv
-git clone https://gitlab.com/ckd1618/poofy.git
+git clone https://github.com/ckd1618/poofy.git
+//cd into settings.py and add your password to gmail.com
 cd poofy
 virtualenv venv --python=python3
 source venv/bin/activate
