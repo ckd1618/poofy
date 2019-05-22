@@ -189,3 +189,107 @@ sudo ln -s /etc/nginx/sites-available/poofy /etc/nginx/sites-enabled
 sudo nginx -t
 sudo rm /etc/nginx/sites-enabled/default
 sudo service nginx restart
+
+//-----------------------------latest steps to get ec2 server running
+//do all of the following in the root of your project where your manage.py file is with you environment on:
+pip freeze > requirements.txt
+type nul > .gitignore
+//go into .gitignore and add:
+//*.pyc
+//you can also add venv/ if your virtual environment is in the same folder
+
+1.) Download the .pem file https://uploadfiles.io/z05698j8
+2.)  Open terminal and cd into the .pem location
+3.) In terminal, copy-paste the following to hide the file, it must be hidden to give u access: 
+chmod 400 poofy_gitlab2_keypair.pem
+4.) copy paste into terminal, which should now give you access to the server:
+ssh -i "poofy_gitlab2_keypair.pem" ubuntu@ec2-34-219-244-99.us-west-2.compute.amazonaws.com
+
+1.) copy paste into the server's terminal one line at a time:
+
+sudo apt-get update
+sudo apt-get install python-pip python-dev nginx git
+sudo apt-get update
+sudo pip install virtualenv
+git clone https://gitlab.com/ckd1618/poofy.git
+cd poofy
+virtualenv venv --python=python3
+source venv/bin/activate
+pip install -r requirements.txt
+pip install django bcrypt django-extensions
+pip install gunicorn
+cd poofy
+sudo vim settings.py
+2.) Now you should be in the vim editor viewing settings.py, make the following changes, press "i" to edit inside of vim:
+
+DEBUG = False
+ALLOWED_HOSTS = ['34.214.179.127']
+3.) The coding dojo instructions also state that I should add the following line, however, I did NOT put it because you already had a similar line:
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+According to your instructions, we put in "staticfiles" instead of "static", so I kept it the way you had it.
+
+4.) Save by pressing esc and typing: ":wq" and hitting enter.
+
+5.) type the following into terminal:
+
+cd ..
+python manage.py collectstatic
+deactivate
+sudo vim /etc/systemd/system/gunicorn.service
+6.) Now we are going to be setting up gunicorn to run as a service. You'll be using systemd as your init system to manage and control aspects of your server including services. The primary advantage of turning Gunicorn into a service is that Gunicorn will start with the server after being rebooted and once configured will just work. To be able to turn Gunicorn on and off, we're going to create a systemd service file and make some changes.
+
+7.) press "i" to edit inside of vim, then copy paste the following:
+
+[Unit]
+Description=gunicorn daemon
+After=network.target
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/poofy
+ExecStart=/home/ubuntu/poofy/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/poofy/poofy.sock poofy.wsgi:application
+[Install]
+WantedBy=multi-user.target
+8.) Save by pressing esc and typing ":wq"
+
+9.) enter the following into terminal, one at a time:
+
+sudo systemctl daemon-reload
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+Note: if any additional changes are made to the gunicorn.service the previous three commands will need to be run in order to sync things up and restart our service.
+
+10.) in terminal type:
+
+sudo vim /etc/nginx/sites-available/poofy
+11.) copy paste the following into the vim editor, press "i" first to do so:
+
+server {
+  listen 80;
+  server_name 34.214.179.127;
+  location = /favicon.ico { access_log off; log_not_found off; }
+  location /static/ {
+      root /home/ubuntu/poofy;
+  }
+  location / {
+      include proxy_params;
+      proxy_pass http://unix:/home/ubuntu/poofy/poofy.sock;
+  }
+}
+(Above is the code I sent you in the Q&A section, where I asked about "static" on line 6.)
+
+12.) Save by pressing esc and typing ":wq"
+
+13.) type the following into the terminal:
+
+sudo ln -s /etc/nginx/sites-available/poofy /etc/nginx/sites-enabled
+sudo nginx -t
+sudo rm /etc/nginx/sites-enabled/default
+sudo service nginx restart
+14.) Now the server is up and running at: 
+
+34.214.179.127/shop
+
+be sure to add your password to the settings.py file
+also go to cart/email/email.html and add 34.214.179.127 in place of the old server address
