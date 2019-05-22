@@ -110,12 +110,12 @@ def cart_detail(request, total=0, counter=0, cart_items= None):
           # terminal confirmation when saved
           print('The order has been created')
 
-				try:
-					'''Calling the sendEmail function'''
-					sendEmail(order_details.id)
-					print('The order email has been sent to the customer.')
-				except IOError as e:
-					return e
+        try:
+          '''Calling the sendEmail function'''
+          sendEmail(order_details.id)
+          print('The order email has been sent to the customer.')
+        except IOError as e:
+          return e
 
         return redirect('order:thanks', order_details.id)
         # return redirect('shop:allProdCat')
