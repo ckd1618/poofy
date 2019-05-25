@@ -150,7 +150,10 @@ def sendEmail(order_id):
 		'''Sending the order'''
 		subject = "Poofy Paradise - New Order #{}".format(transaction.id)
 		to = ['{}'.format(transaction.emailAddress)]
-		from_email = '%s' % settings.EMAIL_HOST_USER
+
+		from_email = "receipt@poofyparadise.com"
+		# from_email = '%s' % settings.EMAIL_HOST_USER # gmail only
+
 		order_information = {
 		'transaction' : transaction,
 		'order_items' :	order_items

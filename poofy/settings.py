@@ -145,11 +145,18 @@ STRIPE_PUBLISHABLE_KEY = 'pk_test_eMa5fCSOnhU7wIOuX3giu4MV00K5tHaXCZ'
 STRIPE_SECRET_KEY = 'sk_test_lz1YzCCHvFGleee0CAg2LaRD00XjgBZHj1'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-#Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = '587'
+#Gmail settings (if you want to use gmail instead, Note: AWS does not support this due to potential spammer abuse)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = '587'
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'ckd1240@gmail.com'
+# EMAIL_HOST_PASSWORD = ''#enter your password here as you setup the server
+
+#mailgun only (this is compatible with AWS services)
+EMAIL_HOST = 'smtp.mailgun.org' 
+EMAIL_PORT = '587' #a secure port that uses tls encription
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ckd1240@gmail.com'
-EMAIL_HOST_PASSWORD = ''#enter your password here as you setup the server
+EMAIL_HOST_USER = 'postmaster@sandboxc785162763504368813013e8e5002478.mailgun.org'
+EMAIL_HOST_PASSWORD = '6bc538b4b5a20b7cdf125075962f7ec4-4a62b8e8-d0694c96'
 
