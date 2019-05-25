@@ -157,6 +157,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 EMAIL_HOST = 'smtp.mailgun.org' 
 EMAIL_PORT = '587' #a secure port that uses tls encription
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'postmaster@sandboxc785162763504368813013e8e5002478.mailgun.org'
-EMAIL_HOST_PASSWORD = '6bc538b4b5a20b7cdf125075962f7ec4-4a62b8e8-d0694c96'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
